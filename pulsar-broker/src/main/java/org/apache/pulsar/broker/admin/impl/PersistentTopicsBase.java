@@ -3638,4 +3638,24 @@ public class PersistentTopicsBase extends AdminResource {
         return pulsar().getTopicPoliciesService().updateTopicPoliciesAsync(topicName, topicPolicies.get());
     }
 
+    protected void internalSetReplicatedSubscriptionEnabled(String subscriptionName, Boolean enabled) {
+        try {
+            Topic topic = getTopicReference(topicName);
+            Subscription subscription = topic.getSubscription(subscriptionName);
+            if (subscription != null) {
+                if (subscription.isReplicated() != enabled) {
+                    subscription.setReplicated(enabled);
+                }
+            } else {
+                throw new RestException(Status.NOT_FOUND, "Subscription doesn't exist");
+            }
+        } catch (RestException re) {
+            throw re;
+        } catch (Exception e) {
+            // unknown error marked as internal server error
+            log.warn("Unexpected error  topic={}, Error: {}", topicName, e.getMessage());
+            throw new RestException(e);
+        }
+    }
+
 }

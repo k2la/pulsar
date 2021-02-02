@@ -51,6 +51,8 @@ public interface Subscription {
 
     boolean isReplicated();
 
+    void setReplicated(boolean enabled);
+
     Dispatcher getDispatcher();
 
     long getNumberOfEntriesInBacklog(boolean getPreciseBacklog);

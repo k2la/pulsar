@@ -92,6 +92,11 @@ public class NonPersistentSubscription implements Subscription {
     }
 
     @Override
+    public void setReplicated(boolean enabled) {
+        return;
+    }
+
+    @Override
     public synchronized void addConsumer(Consumer consumer) throws BrokerServiceException {
         updateLastActive();
         if (IS_FENCED_UPDATER.get(this) == TRUE) {

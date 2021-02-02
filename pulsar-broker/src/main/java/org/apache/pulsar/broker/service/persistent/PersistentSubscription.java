@@ -153,7 +153,8 @@ public class PersistentSubscription implements Subscription {
         return replicatedSubscriptionSnapshotCache != null;
     }
 
-    void setReplicated(boolean replicated) {
+    @Override
+    public void setReplicated(boolean replicated) {
         this.replicatedSubscriptionSnapshotCache = replicated
                 ? new ReplicatedSubscriptionSnapshotCache(subName,
                         topic.getBrokerService().pulsar().getConfiguration()
