@@ -3658,4 +3658,25 @@ public class PersistentTopicsBase extends AdminResource {
         }
     }
 
+    protected void internalSetReplicatedSubscriptionEnabledPerTopic(Boolean enabled) {
+        try {
+            Topic topic = getTopicReference(topicName);
+            if (topic != null) {
+                topic.getSubscriptions().forEach((subName, sub) -> {
+                    if (sub.isReplicated() != enabled) {
+                        sub.setReplicated(enabled);
+                    }
+                });
+            } else {
+                throw new RestException(Status.NOT_FOUND, "Topic doesn't exist");
+            }
+        } catch (RestException re) {
+            throw re;
+        } catch (Exception e) {
+            // unknown error marked as internal server error
+            log.warn("Unexpected error  topic={}, Error: {}", topicName, e.getMessage());
+            throw new RestException(e);
+        }
+    }
+
 }

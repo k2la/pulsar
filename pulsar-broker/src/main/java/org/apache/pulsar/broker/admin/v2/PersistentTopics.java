@@ -2664,5 +2664,27 @@ public class PersistentTopics extends PersistentTopicsBase {
         internalSetReplicatedSubscriptionEnabled(subscription, enabled);
     }
 
+    @POST
+    @Path("/{tenant}/{namespace}/{topic}/replicatedSubscriptionEnabled")
+    @ApiOperation(value = "enable replicated subscriptions about the given topic")
+    @ApiResponses(value = {
+            @ApiResponse(code = 307, message = "Current broker doesn't serve the namespace of this topic"),
+            @ApiResponse(code = 401, message = "Don't have permission to administrate resources on this tenant"),
+            @ApiResponse(code = 403, message = "Don't have admin permission"),
+            @ApiResponse(code = 404, message = "Subscription doesn't exist"),
+            @ApiResponse(code = 500, message = "Internal server error") })
+    public void setReplicatedSubscriptionEnabledPerTopic(
+            @ApiParam(value = "Specify the tenant", required = true)
+            @PathParam("tenant") String tenant,
+            @ApiParam(value = "Specify the namespace", required = true)
+            @PathParam("namespace") String namespace,
+            @ApiParam(value = "Specify topic name", required = true)
+            @PathParam("topic") String topic,
+            @ApiParam(value = "replicatedSubscriptionEnabled for the specified topic")
+                    Boolean enabled) {
+        validateTopicName(tenant, namespace, topic);
+        internalSetReplicatedSubscriptionEnabledPerTopic(enabled);
+    }
+
     private static final Logger log = LoggerFactory.getLogger(PersistentTopics.class);
 }
