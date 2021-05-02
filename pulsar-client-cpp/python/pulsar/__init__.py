@@ -1175,6 +1175,11 @@ class Consumer:
         """
         self._consumer.seek(messageid)
 
+    def is_connected(self):
+        """
+        Whether the consumer is connected to the broker
+        """
+
     def close(self):
         """
         Close the consumer.
